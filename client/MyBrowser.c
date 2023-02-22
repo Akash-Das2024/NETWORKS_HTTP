@@ -89,7 +89,7 @@ int main()
         strcpy(host_name, host);
         serv_addr.sin_family = AF_INET;
         struct hostent *host_ = gethostbyname(host);
-        memcpy(&serv_addr.sin_addr.s_addr, host_->h_addr, host_->h_length);
+        memcpy(&serv_addr.sin_addr.s_addr, host_->h_addr_list[0], host_->h_length);
         serv_addr.sin_port = htons(port);
 
         // printf("server:%s %d\n", inet_ntoa(serv_addr.sin_addr), ntohs(serv_addr.sin_port));
