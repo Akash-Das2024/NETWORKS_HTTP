@@ -95,7 +95,7 @@ int main()
         if ((connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr))) < 0)
         {
             perror("Unable to connect to server\n");
-            exit(1);
+            exit(0);
         }
 
         time_t now;
@@ -305,7 +305,6 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
     char *line_end;
     int content_size = 0;
     char *content = NULL;
-    int flag = 0;
 
     printf("HTTP RESPONSE:\n");
     while (1)
@@ -351,7 +350,6 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
         else if (strncmp(line, "Expires:", 8) == 0)
         {
             sscanf(line, "Expires: %[^\n]", expires);
-            flag = 1;
         }
         else if (strncmp(line, "Last-modified:", 14) == 0)
         {
@@ -362,7 +360,7 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
 
     printf("STATUS: %d %s\n", status_code, status_msg);
 
-    if (flag == 1)
+    if (expires != NULL)
     {
         // printf("%s\n", expires);
         struct tm tm;
@@ -399,7 +397,7 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
     if (strcmp(cache_control, "no-store") == 0)
     {
         mkdir("__temp__", 0700);
-        if (strncmp(content_type, "text/html", 9) == 0)
+        if (strcmp(content_type, "text/html") == 0)
         {
             strcpy(output_file, "__temp__/___temp__.html");
         }
@@ -428,7 +426,7 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
     {
         if (status_code != 200 || strcmp(method, "PUT") == 0)
         {
-            if (strncmp(content_type, "text/html", 9) == 0)
+            if (strcmp(content_type, "text/html") == 0)
             {
                 strcpy(output_file, "___error_msg.html");
             }
@@ -458,31 +456,11 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
         {
             strcat(output_file, "index.html");
         }
+        // printf("%s\n", output_file);
         char *temp = (char *)malloc(strlen(output_file) + 1);
         strcpy(temp, output_file);
-        char *filepath = dirname(temp);
-        // printf("1\n");
-        // printf("%s\n", filepath);
-        char *args[] = {"mkdir", "-p", filepath, NULL};
-        // printf("%s\n", dirname(temp));
-        int pid = fork();
-        if (pid == 0)
-        {
-            execvp(args[0], args);
-            exit(1);
-        }
-        else if (pid < 0)
-        {
-            perror("fork() error: \n");
-            exit(1);
-        }
-        else
-        {
-            wait(NULL);
-        }
+        mkdir(dirname(temp), 0700);
     }
-    // printf("%s\n", output_file);
-    // printf("%s\n", output_file);
 
     FILE *file = fopen(output_file, "wb");
 
@@ -494,10 +472,9 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
     {
         fwrite(content, 1, content_size, file);
         fclose(file);
-
         if (fork() == 0)
         {
-            if (strncmp(content_type, "text/html", 9) == 0)
+            if (strcmp(content_type, "text/html") == 0)
             {
                 char *args[] = {browser, output_file, NULL};
                 execvp(browser, args);
@@ -521,18 +498,14 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
             {
                 printf("Unknown content_type sent by the server\n");
             }
-            exit(1);
         }
-        else
+        int status;
+        wait(&status);
+        if (strcmp(cache_control, "no-store") == 0)
         {
-            int status;
-            wait(&status);
-            if (strcmp(cache_control, "no-store") == 0)
-            {
-                remove(output_file);
-                printf("file removed :: cache_control= no-store\n");
-                // delete the output file
-            }
+            remove(output_file);
+            printf("file removed :: cache_control= no-store\n");
+            // delete the output file
         }
     }
 }
