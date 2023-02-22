@@ -13,6 +13,7 @@
 #include <sys/wait.h>
 #define __USE_XOPEN
 #include <time.h>
+#include <errno.h>
 
 char *browser = "google-chrome";
 char *adobe = "acroread";
@@ -22,6 +23,7 @@ char *gedit = "gedit";
 #define POLL_TIMEOUT 3000
 
 void get_put_http_response(char *, int, char *, char *);
+int mkdirp(char *, mode_t);
 
 int main()
 {
@@ -428,19 +430,19 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
         {
             if (strcmp(content_type, "text/html") == 0)
             {
-                strcpy(output_file, "___error_msg.html");
+                strcpy(output_file, "__err__/___error_msg.html");
             }
             else if (strcmp(content_type, "application/pdf") == 0)
             {
-                strcpy(output_file, "___error_msg.pdf");
+                strcpy(output_file, "__err__/___error_msg.pdf");
             }
             else if (strcmp(content_type, "image.jpeg") == 0)
             {
-                strcpy(output_file, "___error_msg.jpg");
+                strcpy(output_file, "__err__/___error_msg.jpg");
             }
             else
             {
-                strcpy(output_file, "___error_msg.txt");
+                strcpy(output_file, "__err__/___error_msg.txt");
             }
         }
         else
@@ -456,12 +458,19 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
         {
             strcat(output_file, "index.html");
         }
-        // printf("%s\n", output_file);
-        char *temp = (char *)malloc(strlen(output_file) + 1);
-        strcpy(temp, output_file);
-        mkdir(dirname(temp), 0700);
     }
 
+    // printf("%s\n", output_file);
+    char *temp = (char *)malloc(strlen(output_file) + 1);
+    strcpy(temp, output_file);
+    temp = dirname(temp);
+    // printf("%s\n", temp);
+    if (mkdirp(temp, 0777) == -1)
+    {
+        printf("unable to create dir\n");
+    }
+
+    // printf("%s\n", output_file);
     FILE *file = fopen(output_file, "wb");
 
     if (!file)
@@ -508,4 +517,29 @@ void get_put_http_response(char *response, int total_len, char *filename, char *
             // delete the output file
         }
     }
+}
+
+int mkdirp(char *path, mode_t mod)
+{
+    char current_path[256];
+    char *dir = NULL;
+    size_t len;
+
+    current_path[0] = '\0';
+
+    for (dir = strtok(path, "/"); dir != NULL; dir = strtok(NULL, "/"))
+    {
+        len = strlen(current_path);
+        if (len > 0 && current_path[len - 1] != '/')
+        {
+            strncat(current_path, "/", 2);
+        }
+        strncat(current_path, dir, sizeof(current_path) - len - 1);
+        if (mkdir(current_path, mod) == -1 && errno != EEXIST)
+        {
+            return -1;
+        }
+    }
+
+    return 0;
 }

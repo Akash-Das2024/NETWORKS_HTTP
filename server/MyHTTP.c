@@ -259,7 +259,7 @@ response process_http_request(char *request, int total_len)
             fclose(file);
 
             char header[2000];
-            sprintf(header, "HTTP/1.1 403 Forbidden\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
+            sprintf(header, "HTTP/1.1 403 Forbidden\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
 
             response = (char *)malloc(strlen(header) + content_size);
             strcpy(response, header);
@@ -283,7 +283,7 @@ response process_http_request(char *request, int total_len)
                 fclose(file);
 
                 char header[2000];
-                sprintf(header, "HTTP/1.1 400 Bad Request\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
+                sprintf(header, "HTTP/1.1 400 Bad Request\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
 
                 response = (char *)malloc(strlen(header) + content_size);
                 strcpy(response, header);
@@ -306,7 +306,7 @@ response process_http_request(char *request, int total_len)
                 fclose(file);
 
                 char header[2000];
-                sprintf(header, "HTTP/1.1 200 Ok\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
+                sprintf(header, "HTTP/1.1 200 Ok\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
 
                 response = (char *)malloc(strlen(header) + content_size);
                 strcpy(response, header);
@@ -404,7 +404,7 @@ response process_http_request(char *request, int total_len)
             fclose(file);
 
             char header[2000];
-            sprintf(header, "HTTP/1.1 400 Bad Request\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
+            sprintf(header, "HTTP/1.1 400 Bad Request\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
 
             response = (char *)malloc(strlen(header) + content_size);
             strcpy(response, header);
@@ -425,7 +425,7 @@ response process_http_request(char *request, int total_len)
             fclose(file);
 
             char header[2000];
-            sprintf(header, "HTTP/1.1 403 Forbidden\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
+            sprintf(header, "HTTP/1.1 403 Forbidden\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
 
             response = (char *)malloc(strlen(header) + content_size);
             strcpy(response, header);
@@ -449,7 +449,7 @@ response process_http_request(char *request, int total_len)
                 fclose(file);
 
                 char header[2000];
-                sprintf(header, "HTTP/1.1 404 Not Found\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
+                sprintf(header, "HTTP/1.1 404 Not Found\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
 
                 response = (char *)malloc(strlen(header) + content_size);
                 strcpy(response, header);
@@ -495,7 +495,7 @@ response process_http_request(char *request, int total_len)
                         fclose(file);
 
                         char header[2000];
-                        sprintf(header, "HTTP/1.1 400 Bad Request\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\nLast-modified: %s\r\n\r\n", expires_header, content_size, last_mod);
+                        sprintf(header, "HTTP/1.1 400 Bad Request\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\nLast-modified: %s\r\n\r\n", expires_header, content_size, last_mod);
 
                         response = (char *)malloc(strlen(header) + content_size);
                         strcpy(response, header);
@@ -540,7 +540,7 @@ response process_http_request(char *request, int total_len)
                         strcpy(accept, "text/*");
                     }
                     char header[2000];
-                    sprintf(header, "HTTP/1.1 200 Ok\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: %s\r\nLast-modified: %s\r\n\r\n", expires_header, content_size, accept, last_mod);
+                    sprintf(header, "HTTP/1.1 200 Ok\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: %s\r\nLast-modified: %s\r\n\r\n", expires_header, content_size, accept, last_mod);
 
                     response = (char *)malloc(strlen(header) + content_size);
                     strcpy(response, header);
@@ -564,7 +564,7 @@ response process_http_request(char *request, int total_len)
         fclose(file);
 
         char header[1000];
-        sprintf(header, "HTTP/1.1 400 Bad Request\r\n%s\r\nCache-control: no-store\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
+        sprintf(header, "HTTP/1.1 400 Bad Request\r\n%s\r\nCache-control: public\r\nContent-language: en-US\r\nContent-Length: %ld\r\nContent-Type: text/html\r\n\r\n", expires_header, content_size);
 
         response = (char *)malloc(strlen(header) + content_size);
         strcpy(response, header);
