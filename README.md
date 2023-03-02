@@ -1,11 +1,21 @@
-# NETWORKS_HTTP
+# NETWORKS_HTTP (Networks Assgn 4)
 
-WORKING:
+### WORKING:
 
-server: cc MyHTTP.c -o myhttp
-client: cc MyBrowser.c -o mybrowser
+server:
 
-run both files ./myhttp and ./mybrowser and now you are ready to request in mybrowser.
-some examples are given in makefile
+```
+cc MyHTTP.c -o myhttp
+```
 
-** there is no use of makefile
+client:
+
+```
+cc MyBrowser.c -o mybrowser
+```
+
+-   run both files ./myhttp and ./mybrowse
+
+### makefile:
+
+-   makefile is just to give some example request(browser side) that you can make
